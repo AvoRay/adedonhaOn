@@ -1,4 +1,4 @@
-import mechanicalsoup
+#import mechanicalsoup
 
 import mysql.connector
 
@@ -11,12 +11,18 @@ mydb = mysql.connector.connect(
 cursor = mydb.cursor()
 cursor.execute('CREATE TABLE IF NOT EXISTS jogador (nome VARCHAR(255),pontos INTEGER(255))')
 cursor.execute('CREATE TABLE IF NOT EXISTS charada (frase VARCHAR(255))')
+cursor.execute('CREATE TABLE IF NOT EXISTS versus (jogador1 VARCHAR(255),jogador2 VARCHAR(255))')
 
-name = 'John'
-pt = 55
+name = 'Rick'
+pt = 90
 
-cursor.execute('INSERT INTO jogador (nome,pontos) VALUES(%s,%s)',(name,pt))
-mydb.commit()
+cursor.execute('SELECT * FROM versus')
+if cursor.fetchall() == []:# se o banco estiver vazio
+    cursor.execute('INSERT INTO versus (jogador1,jogador2) VALUES ("PLAY1","PLAY2")')
+    mydb.commit()
+else:#Removendo os jogadores do versus
+    cursor.execute('UPDATE versus SET jogador1 = "PLAY1",jogador2 = "PLAY2"')
+    mydb.commit()
 
 ''' CRIAR UM MODULO PARA ISSO DEPOIS
 browser = mechanicalsoup.Browser()
@@ -42,7 +48,7 @@ while True:
     assunto = (str(choice(['comidas','cidade','frutas','pessoas','objetos','filmes','animais']).upper()))
 
     frase = '\nAdedoooonhaaa !!! nome de {} com a letra {} \n'.format(assunto,alfa)
-    print(frase)
+    
     
     
     cursor.execute('SELECT * FROM charada')
@@ -52,6 +58,8 @@ while True:
     else:# se ja tiver uma frase no banco
         cursor.execute('UPDATE  charada SET frase = (%s)',[frase])
         mydb.commit()
+
+    print('A pergunta foi lançada')
     
     
     #mydb.commit()
