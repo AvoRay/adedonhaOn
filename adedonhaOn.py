@@ -8,7 +8,15 @@ mydb = mysql.connector.connect(
     password = 'MJgw6pEpcH',
     db = 'sql10360953'
     )
-print(mydb)
+cursor = mydb.cursor()
+cursor.execute('CREATE TABLE IF NOT EXISTS jogador (nome VARCHAR(255),pontos INTEGER(255))')
+cursor.execute('CREATE TABLE IF NOT EXISTS charada (frase VARCHAR(255))')
+
+name = 'John'
+pt = 55
+
+cursor.execute('INSERT INTO jogador (nome,pontos) VALUES(%s,%s)',(name,pt))
+mydb.commit()
 
 ''' CRIAR UM MODULO PARA ISSO DEPOIS
 browser = mechanicalsoup.Browser()
@@ -33,7 +41,20 @@ while True:
     alfa = str(choice(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])).upper()
     assunto = (str(choice(['comidas','cidade','frutas','pessoas','objetos','filmes','animais']).upper()))
 
-    print('\nAdedoooonhaaa !!! nome de {} com a letra {} \n'.format(assunto,alfa))
+    frase = '\nAdedoooonhaaa !!! nome de {} com a letra {} \n'.format(assunto,alfa)
+    print(frase)
+    
+    
+    cursor.execute('SELECT * FROM charada')
+    if cursor.fetchall() == []:# se o banco estiver vazio
+        cursor.execute('INSERT INTO charada (frase) VALUES (%s)',[frase])
+        mydb.commit()
+    else:# se ja tiver uma frase no banco
+        cursor.execute('UPDATE  charada SET frase = (%s)',[frase])
+        mydb.commit()
+    
+    
+    #mydb.commit()
     #if assunto == 'CIDADE':
         #Pesquisa(input('Qual nome da Cidade ? '))
     
