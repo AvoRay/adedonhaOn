@@ -1,7 +1,7 @@
 #import mechanicalsoup
 
 import mysql.connector
-
+from time import sleep
 mydb = mysql.connector.connect(
     host = 'sql10.freesqldatabase.com',
     user = 'sql10360953',
@@ -9,20 +9,13 @@ mydb = mysql.connector.connect(
     db = 'sql10360953'
     )
 cursor = mydb.cursor()
-cursor.execute('CREATE TABLE IF NOT EXISTS jogador (nome VARCHAR(255),pontos INTEGER(255))')
-cursor.execute('CREATE TABLE IF NOT EXISTS charada (frase VARCHAR(255))')
-cursor.execute('CREATE TABLE IF NOT EXISTS versus (jogador1 VARCHAR(255),jogador2 VARCHAR(255))')
-
 name = 'Rick'
 pt = 90
 
-cursor.execute('SELECT * FROM versus')
-if cursor.fetchall() == []:# se o banco estiver vazio
-    cursor.execute('INSERT INTO versus (jogador1,jogador2) VALUES ("PLAY1","PLAY2")')
-    mydb.commit()
-else:#Removendo os jogadores do versus
-    cursor.execute('UPDATE versus SET jogador1 = "PLAY1",jogador2 = "PLAY2"')
-    mydb.commit()
+
+cursor.execute('UPDATE versus SET jogador1 = "PLAY1",jogador2 = "PLAY2"')
+mydb.commit()
+cursor.execute('UPDATE resposta SET resp = "VAZIO",jogador = "VAZIO"')
 
 ''' CRIAR UM MODULO PARA ISSO DEPOIS
 browser = mechanicalsoup.Browser()
@@ -48,32 +41,29 @@ while True:
     assunto = (str(choice(['comidas','cidade','frutas','pessoas','objetos','filmes','animais']).upper()))
 
     frase = '\nAdedoooonhaaa !!! nome de {} com a letra {} \n'.format(assunto,alfa)
-    
-    
-    
-    cursor.execute('SELECT * FROM charada')
-    if cursor.fetchall() == []:# se o banco estiver vazio
-        cursor.execute('INSERT INTO charada (frase) VALUES (%s)',[frase])
-        mydb.commit()
-    else:# se ja tiver uma frase no banco
-        cursor.execute('UPDATE  charada SET frase = (%s)',[frase])
-        mydb.commit()
+
+    cursor.execute('UPDATE  charada SET frase = (%s)',[frase])
+    mydb.commit()
 
     print('A pergunta foi lançada')
+    sleep(10)
+
+    '''
+    mydb = mysql.connector.connect(
+    host = 'sql10.freesqldatabase.com',
+    user = 'sql10360953',
+    password = 'MJgw6pEpcH',
+    db = 'sql10360953'
+    )
+    cursor = mydb.cursor()
+    cursor.execute('SELECT * FROM resposta')
+    respostas = cursor.fetchall()'''
     
     
-    #mydb.commit()
-    #if assunto == 'CIDADE':
-        #Pesquisa(input('Qual nome da Cidade ? '))
     
-    sleep(8)
- 
-    player=['LehMae','Ceceda']
-    vence = input('Quem Ganho ? \n1 = {}\n2 = {}\n'.format(player[0],player[1]))
     
-    if vence =='1':
-        pt1+=1
-    elif vence =='2':
-        pt2+=1
+
     
-    print('\nPontuaçao\n{} = {} Pontod\n{} = {} Pontos'.format(player[0],pt1,player[1],pt2))
+
+    
+

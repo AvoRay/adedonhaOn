@@ -1,5 +1,4 @@
 import mysql.connector
-from time import sleep
 
 mydb = mysql.connector.connect(
 host = 'sql10.freesqldatabase.com',
@@ -34,12 +33,15 @@ elif jogadores[1] == 'PLAY2': #jogador 2
     cursor.execute('UPDATE versus SET jogador2 = (%s)',[nick])
     mydb.commit()
 
+else:
+    nick= 'Indigente'
+
 
 
 
 while True:
     jogadores = versus()
-    if jogadores[0] !='PLAY1' and jogadores[1]!='PLAY2':
+    if jogadores[0] !='PLAY1' and jogadores[1]!='PLAY2':# se os dois tiver logado ja
         
         mydb = mysql.connector.connect(
         host = 'sql10.freesqldatabase.com',
@@ -48,11 +50,44 @@ while True:
         db = 'sql10360953'
         )
         cursor = mydb.cursor()
-            
+          
         cursor.execute('SELECT * FROM charada')
-        print(cursor.fetchone()[0])
-        sleep(1)
+        
+        pergunta = cursor.fetchone()[0]
+        
+        print(pergunta)
+        
+
+        mydb = mysql.connector.connect(
+        host = 'sql10.freesqldatabase.com',
+        user = 'sql10360953',
+        password = 'MJgw6pEpcH',
+        db = 'sql10360953'
+        )
+        cursor = mydb.cursor()
+        cursor.execute('SELECT * FROM resposta')
+        respostas = cursor.fetchall()
+        
+        if respostas[0][0]!='VAZIO':# se ja foi respondido
+        
+            jogador = respostas[0][1]
+            resposta = respostas[0][0]
+            print('O jogador {} respondeu {}'.format(jogador,resposta))
+
+        else:# se nao foi respondido
+            resposta = input('Resposta : \n')
+
+            mydb = mysql.connector.connect(
+            host = 'sql10.freesqldatabase.com',
+            user = 'sql10360953',
+            password = 'MJgw6pEpcH',
+            db = 'sql10360953'
+            )
+            
+            cursor = mydb.cursor()
+            cursor.execute('UPDATE resposta SET resp = (%s),jogador = (%s)',(resposta,nick))
+            mydb.commit()
     else:
-        input('AGUARDANDO JOGADOR 2...\n\n\n PRESSIONE QUAL QUER TECLA')
+        input('AGUARDANDO JOGADOR 2...\n\n\nPRESSIONE QUAL QUER TECLA')
     
         
