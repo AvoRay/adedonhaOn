@@ -73,6 +73,9 @@ while True:
             jogador = respostas[0][1]
             resposta = respostas[0][0]
             print('O jogador {} respondeu {}'.format(jogador,resposta))
+            input('\nContinue...')
+            cursor.execute('UPDATE charada SET frase = "VAZIO"')
+            mydb.commit()
 
         else:# se nao foi respondido
             resposta = input('Resposta : \n')
@@ -86,6 +89,7 @@ while True:
             
             cursor = mydb.cursor()
             cursor.execute('UPDATE resposta SET resp = (%s),jogador = (%s)',(resposta,nick))
+            cursor.execute('UPDATE charada SET frase = "VAZIO"')
             mydb.commit()
     else:
         input('AGUARDANDO JOGADOR 2...\n\n\nPRESSIONE QUAL QUER TECLA')
