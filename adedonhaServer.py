@@ -16,6 +16,7 @@ pt = 90
 cursor.execute('UPDATE versus SET jogador1 = "PLAY1",jogador2 = "PLAY2"')
 mydb.commit()
 cursor.execute('UPDATE resposta SET resp = "VAZIO",jogador = "VAZIO"')
+mydb.commit()
 
 ''' CRIAR UM MODULO PARA ISSO DEPOIS
 browser = mechanicalsoup.Browser()
@@ -37,28 +38,35 @@ from time import sleep
 pt1 = 0
 pt2 = 0
 while True:
-    alfa = str(choice(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])).upper()
-    assunto = (str(choice(['comidas','cidade','frutas','pessoas','objetos','filmes','animais']).upper()))
-
-    frase = '\nAdedoooonhaaa !!! nome de {} com a letra {} \n'.format(assunto,alfa)
-
-    cursor.execute('UPDATE  charada SET frase = (%s)',[frase])
-    mydb.commit()
-
-    print('A pergunta foi lançada')
-    sleep(10)
-
-    '''
-    mydb = mysql.connector.connect(
-    host = 'sql10.freesqldatabase.com',
-    user = 'sql10360953',
-    password = 'MJgw6pEpcH',
-    db = 'sql10360953'
-    )
-    cursor = mydb.cursor()
-    cursor.execute('SELECT * FROM resposta')
-    respostas = cursor.fetchall()'''
+    cursor.execute('SELECT *FROM charada')
     
+    charada = cursor.fetchall()
+    if charada[0][0] == 'VAZIO':
+	    
+	    
+	    
+	    alfa = str(choice(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'])).upper()
+	    assunto = (str(choice(['comidas','cidade','frutas','pessoas','objetos','filmes','animais']).upper()))
+	
+	    frase = '\nAdedoooonhaaa !!! nome de {} com a letra {} \n'.format(assunto,alfa)
+	
+	    cursor.execute('UPDATE  charada SET frase = (%s)',[frase])
+	    mydb.commit()
+	
+	    print('A pergunta foi lançada')
+	    sleep(1)
+	
+	    '''
+	    mydb = mysql.connector.connect(
+	    host = 'sql10.freesqldatabase.com',
+	    user = 'sql10360953',
+	    password = 'MJgw6pEpcH',
+	    db = 'sql10360953'
+	    )
+	    cursor = mydb.cursor()
+	    cursor.execute('SELECT * FROM resposta')
+	    respostas = cursor.fetchall()'''
+	    
     
     
     
